@@ -24,6 +24,7 @@ import { Button } from "@components/Button";
 import { AuthNavigatorRoutesProps } from "@routes/auth.routes";
 import { api } from "@services/api";
 import { AppError } from "@utils/AppError";
+import { useAuth } from "@hooks/useAuth";
 
 type FormDataProps = {
   name: string;
@@ -52,7 +53,9 @@ const signInSchema = yup
 
 export function SignUp() {
   const navigation = useNavigation<AuthNavigatorRoutesProps>();
+  const [isLoading, setIsLoading] = useState(false);
   const Toast = useToast();
+  const { signIn } = useAuth();
 
   const {
     control,
@@ -78,10 +81,12 @@ export function SignUp() {
     //   .then((response) => response.json())
     //   .then((data) => console.log(data));
     try {
-      const response = await api.post("/users", { name, email, password });
+      setIsLoading(true);
+      await api.post("/users", { name, email, password });
 
-      console.log(response.data);
+      await signIn(email, password);
     } catch (error) {
+      setIsLoading(true);
       const isAppError = error instanceof AppError;
       const title = isAppError
         ? error.message
@@ -194,6 +199,7 @@ export function SignUp() {
           <Button
             title="Criar e acessar"
             onPress={handleSubmit(handleSignUp)}
+            isLoading={isLoading}
           />
         </Center>
 

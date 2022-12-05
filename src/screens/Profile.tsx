@@ -18,11 +18,15 @@ import { Button } from "@components/Button";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 
+import { useAuth } from "@hooks/useAuth";
+import userPhotoDefaultIcon from "@assets/userPhotoDefault.png";
+
 const PHOTO_SIZE = 33;
 
 export function Profile() {
   const [photoIsLoading, setPhotoIsLoading] = useState(false);
   const [image, setImage] = useState("");
+  const { user } = useAuth();
 
   const Toast = useToast();
 
@@ -43,7 +47,7 @@ export function Profile() {
           return Toast.show({
             title: "Essa image é muito grande, escolher uma de até 5MB",
             placement: "top",
-            bgColor: 'red.500'
+            bgColor: "red.500",
           });
         }
 
@@ -71,7 +75,7 @@ export function Profile() {
             />
           ) : (
             <UserPhoto
-              source={image !== "" ? { uri: image } : undefined}
+              source={image !== "" ? { uri: image } : userPhotoDefaultIcon}
               alt={"Foto do usuário"}
               size={PHOTO_SIZE}
             />
@@ -93,7 +97,7 @@ export function Profile() {
         </Center>
 
         <VStack px={10} mt={12} mb={9}>
-          <Heading color="gray.200" fontSize="md" mb={2} fontFamily='heading'>
+          <Heading color="gray.200" fontSize="md" mb={2} fontFamily="heading">
             Alterar senha
           </Heading>
 
