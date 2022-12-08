@@ -18,7 +18,7 @@ import { Profile } from "@screens/Profile";
 
 type AuthRoutes = {
   home: undefined;
-  exercise: undefined;
+  exercise: { exerciseId: string };
   history: undefined;
   profile: undefined;
 };
