@@ -60,7 +60,6 @@ const profileSchema = Yup.object({
 export function Profile() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [photoIsLoading, setPhotoIsLoading] = useState(false);
-  const [image, setImage] = useState("");
 
   const { user, updateUserProfile } = useAuth();
 
@@ -98,7 +97,36 @@ export function Profile() {
           });
         }
 
-        setImage(result.assets[0].uri);
+        const fileExtension = result.assets[0].uri.split(".").pop();
+
+        const photoFile = {
+          name: `${user.name}.${fileExtension}`.toLowerCase(),
+          uri: result.assets[0].uri,
+          type: `${result.assets[0].type}/${fileExtension}`,
+        } as any;
+
+        const userPhotoUploadForm = new FormData();
+        userPhotoUploadForm.append("avatar", photoFile);
+
+        const avatarUpdateResponse = await api.patch(
+          "/users/avatar",
+          userPhotoUploadForm,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        const userUpdated = user;
+        userUpdated.avatar = avatarUpdateResponse.data.avatar;
+        await updateUserProfile(userUpdated);
+
+        Toast.show({
+          title: "Foto atualizada!",
+          placement: "top",
+          bgColor: "green.500",
+        });
       }
     } catch (error) {
       console.log(error);
@@ -151,7 +179,11 @@ export function Profile() {
             />
           ) : (
             <UserPhoto
-              source={image !== "" ? { uri: image } : userPhotoDefaultIcon}
+              source={
+                user.avatar
+                  ? { uri: `${api.defaults.baseURL}/avatar/${user.avatar}` }
+                  : userPhotoDefaultIcon
+              }
               alt={"Foto do usuário"}
               size={PHOTO_SIZE}
             />

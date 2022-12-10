@@ -4,23 +4,27 @@ import { UserPhoto } from "./UserPhoto";
 import { TouchableOpacity } from "react-native";
 import { useAuth } from "@hooks/useAuth";
 import userPhotoDefaultIcon from "@assets/userPhotoDefault.png";
+import { api } from "@services/api";
 
 export function HomeHeader() {
   const { user, signOut } = useAuth();
 
-
-  function handleSignOut(){
+  function handleSignOut() {
     try {
-      signOut()
+      signOut();
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
   return (
     <HStack bg="gray.600" pt={16} pb={5} px={8} alignItems="center">
       <UserPhoto
-        source={user.avatar ? { uri: user.avatar } : userPhotoDefaultIcon}
+        source={
+          user.avatar
+            ? { uri: `${api.defaults.baseURL}/avatar/${user.avatar}` }
+            : userPhotoDefaultIcon
+        }
         size={16}
         alt="Foto do usuário"
         mr={4}
