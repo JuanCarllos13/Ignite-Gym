@@ -24,6 +24,8 @@ import { AuthNavigatorRoutesProps } from "@routes/auth.routes";
 import { AppError } from "@utils/AppError";
 import { useState } from "react";
 
+import { useTranslation } from "react-i18next";
+
 type FormData = {
   email: string;
   password: string;
@@ -47,6 +49,7 @@ export function SignIn() {
   const { signIn } = useAuth();
   const Toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const { t: translate } = useTranslation();
 
   const {
     control,
@@ -99,7 +102,7 @@ export function SignIn() {
           <LogoSvg />
 
           <Text color="gray.100" fontSize="sm">
-            Treine sua mente e o seu corpo
+            {translate("title")}
           </Text>
         </Center>
 
@@ -141,8 +144,11 @@ export function SignIn() {
             )}
           />
 
-          <Button title="Acessar"  onPress={handleSubmit(handleSignIn)}
-          isLoading={isLoading} />
+          <Button
+            title="Acessar"
+            onPress={handleSubmit(handleSignIn)}
+            isLoading={isLoading}
+          />
         </Center>
 
         <Center mt={24}>
