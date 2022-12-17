@@ -1,5 +1,6 @@
 import { UserDto } from "@dtos/userDTO";
 import { createContext, ReactNode, useEffect, useState } from "react";
+import * as LocalAuthentication from "expo-local-authentication";
 import { api } from "@services/api";
 
 import {
@@ -113,13 +114,38 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       setIsLoadingUserStorageData(false);
     }
   }
+  async function biometria() {
+    let compatible = await LocalAuthentication.hasHardwareAsync();
+
+    if (compatible) {
+      let biometriaRecord = await LocalAuthentication.isEnrolledAsync();
+      if (!biometriaRecord) {
+        alert("Biometria não cadastrada");
+      } else {
+        const token = await storageAuthTokenGet();
+        if(token){
+          let result = await LocalAuthentication.authenticateAsync();
+          console.log('result',result)
+          if (result.success) {
+            loadUserData();
+          } else {
+            storageUserRemove();
+            storageAuthTokenRemove()
+            setIsLoadingUserStorageData(false);
+          }
+        }else{
+          setIsLoadingUserStorageData(false);
+        }
+      }
+    }
+  }
 
   function refreshTokenUpdate(newToken: string) {
     SetRefreshToken(newToken);
   }
 
   useEffect(() => {
-    loadUserData();
+    biometria();
   }, []);
 
   useEffect(() => {

@@ -14,6 +14,7 @@ import BackgroundIMG from "@assets/background.png";
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
 
+
 import * as yup from "yup";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -22,7 +23,7 @@ import { useAuth } from "@hooks/useAuth";
 
 import { AuthNavigatorRoutesProps } from "@routes/auth.routes";
 import { AppError } from "@utils/AppError";
-import { useState } from "react";
+import {  useState } from "react";
 
 import { useTranslation } from "react-i18next";
 
