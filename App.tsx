@@ -1,4 +1,5 @@
 import { View, StatusBar } from "react-native";
+import "./src/i18n/i18n";
 import { NativeBaseProvider } from "native-base";
 import {
   useFonts,

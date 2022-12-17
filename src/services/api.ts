@@ -39,7 +39,7 @@ const processQueue = ({ error, token = null }: processQueueParams): void => {
 };
 
 const api = axios.create({
-  baseURL: "http://192.168.1.21:3333",
+  baseURL: "http://192.168.1.15:3333",
 }) as ApiInstanceProps;
 
 api.registerInterceptTokenManager = ({ refreshTokenUpdate, signOut }) => {
